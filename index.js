@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const port = process.env.PORT || 5000
 
+const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
+
 // MiddleWare
 app.use(cors());
 app.use(express.json());
@@ -120,6 +122,14 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/instructors/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: new ObjectId(id) };
+            const result = await instructorsCollection.findOne(query);
+            res.send(result);
+        })
+
 
 
         // get selected classes
@@ -146,6 +156,22 @@ async function run() {
             const result = await selectCollection.insertOne(item);
             res.send(result);
         })
+
+        // Create payment intent
+        app.post("/create-payment-intent", async (req, res) => {
+            const { price } = req.body;
+            const amount = price * 100;
+
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: "usd",
+                payment_method_types: ['card']
+            });
+
+            res.send({
+                clientSecret: paymentIntent.client_secret,
+            });
+        });
 
         app.delete('/selects/:id', async (req, res) => {
             const id = req.params.id;
