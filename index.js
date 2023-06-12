@@ -109,7 +109,7 @@ async function run() {
             const result = await usersCollection.deleteOne(query);
             res.send(result);
         })
-        // all post here
+
         // All class Api
         app.get('/classes', async (req, res) => {
             const result = await classesCollection.find().toArray();
