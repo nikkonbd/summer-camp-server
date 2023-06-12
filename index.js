@@ -130,8 +130,6 @@ async function run() {
             res.send(result);
         })
 
-
-
         // get selected classes
         app.get('/selects', verifyJWT, async (req, res) => {
             const email = req.query.email;
@@ -149,7 +147,7 @@ async function run() {
         })
 
 
-        // Select collection
+        // Select collection here
         app.post('/selects', async (req, res) => {
             const item = req.body;
             console.log(item);
