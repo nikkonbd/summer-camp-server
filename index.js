@@ -58,7 +58,7 @@ async function run() {
             res.send({ token })
         })
 
-        // Users Collection
+        // Users Collection Here
         app.post('/users', async (req, res) => {
             const user = req.body;
             const query = { email: user.email }
